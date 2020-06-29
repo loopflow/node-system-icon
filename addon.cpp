@@ -36,8 +36,8 @@ NAN_METHOD(getIconForPath)
     return;
   }
 
-  v8::String::Utf8Value path{info[0]->ToString()};
-  auto size = static_cast<IconSize>(info[1]->Int32Value());
+  Nan::Utf8String path{info[0]};
+  auto size = static_cast<IconSize>(info[1]->Int32Value(Nan::GetCurrentContext()).FromJust());
   auto callback = new Nan::Callback(info[2].As<v8::Function>());
   Nan::AsyncQueueWorker(
     new SystemIconAsyncWorker<PathTag>(*path, size, callback));
