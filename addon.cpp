@@ -15,8 +15,8 @@ NAN_METHOD(getIconForExtension)
     return;
   }
 
-  v8::String::Utf8Value extension{info[0]->ToString()};
-  auto size = static_cast<IconSize>(info[1]->Int32Value());
+  Nan::Utf8String extension{info[0]};
+  auto size = static_cast<IconSize>(info[1]->Int32Value(Nan::GetCurrentContext()).FromJust());
   auto callback = new Nan::Callback(info[2].As<v8::Function>());
   Nan::AsyncQueueWorker(
     new SystemIconAsyncWorker<ExtensionTag>(*extension, size, callback));
